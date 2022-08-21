@@ -1,7 +1,7 @@
 /*
  * Copyright © 2021 YUMEMI Inc. All rights reserved.
  */
-package jp.co.yumemi.android.code_check
+package jp.co.yumemi.android.code_check.search
 
 import android.content.Context.INPUT_METHOD_SERVICE
 import android.os.Bundle
@@ -16,6 +16,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.*
 import dagger.hilt.android.AndroidEntryPoint
+import jp.co.yumemi.android.code_check.R
 import jp.co.yumemi.android.code_check.databinding.SearchFragmentBinding
 import kotlinx.coroutines.DelicateCoroutinesApi
 
