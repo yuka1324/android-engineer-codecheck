@@ -3,15 +3,16 @@
  */
 package jp.co.yumemi.android.code_check
 
-import android.content.Context
+import android.app.Application
 import android.os.Parcelable
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.AndroidViewModel
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.engine.android.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import jp.co.yumemi.android.code_check.TopActivity.Companion.lastSearchDate
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
@@ -19,15 +20,14 @@ import kotlinx.parcelize.Parcelize
 import org.json.JSONObject
 import java.util.*
 
-class SearchViewModel(
-    val context: Context
-) : ViewModel() {
+@DelicateCoroutinesApi
+class SearchViewModel(application: Application) : AndroidViewModel(application) {
 
     fun searchResults(inputText: String): List<SearchResultContents> = runBlocking {
         val client = HttpClient(Android)
-
+        val context = getApplication<Application>().applicationContext
         return@runBlocking GlobalScope.async {
-            val response: HttpResponse = client?.get("https://api.github.com/search/repositories") {
+            val response: HttpResponse = client.get("https://api.github.com/search/repositories") {
                 header("Accept", "application/vnd.github.v3+json")
                 parameter("q", inputText)
             }

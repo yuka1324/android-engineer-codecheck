@@ -16,7 +16,7 @@ class DetailFragment : Fragment(R.layout.detail_fragment) {
 
     private val args: DetailFragmentArgs by navArgs()
     private var _binding: DetailFragmentBinding? = null
-    private val binding get() = _binding!!
+    private val binding get() = _binding
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -24,12 +24,16 @@ class DetailFragment : Fragment(R.layout.detail_fragment) {
         _binding = DetailFragmentBinding.bind(view)
         val selectedItem = args.searchResultContents
 
-        binding.ownerIconView.load(selectedItem.ownerIconUrl)
-        binding.nameView.text = selectedItem.name
-        binding.languageView.text = selectedItem.language
-        binding.starsView.text = "${selectedItem.stargazersCount} stars"
-        binding.watchersView.text = "${selectedItem.watchersCount} watchers"
-        binding.forksView.text = "${selectedItem.forksCount} forks"
-        binding.openIssuesView.text = "${selectedItem.openIssuesCount} open issues"
+        binding?.let {
+            it.ownerIconView.load(selectedItem.ownerIconUrl)
+            it.nameView.text = selectedItem.name
+            it.languageView.text = selectedItem.language
+            it.starsView.text = getString(R.string.detail_stars_view, selectedItem.stargazersCount)
+            it.watchersView.text =
+                getString(R.string.detail_watchers_view, selectedItem.watchersCount)
+            it.forksView.text = getString(R.string.detail_forks_view, selectedItem.forksCount)
+            it.openIssuesView.text =
+                getString(R.string.detail_open_issue_view, selectedItem.openIssuesCount)
+        }
     }
 }
