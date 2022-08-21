@@ -12,6 +12,7 @@ import io.ktor.client.engine.android.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import jp.co.yumemi.android.code_check.TopActivity.Companion.lastSearchDate
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
@@ -19,6 +20,7 @@ import kotlinx.parcelize.Parcelize
 import org.json.JSONObject
 import java.util.*
 
+@DelicateCoroutinesApi
 class SearchViewModel(application: Application) : AndroidViewModel(application) {
 
     fun searchResults(inputText: String): List<SearchResultContents> = runBlocking {
