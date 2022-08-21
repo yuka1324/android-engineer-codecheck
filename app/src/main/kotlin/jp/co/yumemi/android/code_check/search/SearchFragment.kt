@@ -11,11 +11,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.*
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import jp.co.yumemi.android.code_check.R
 import jp.co.yumemi.android.code_check.data.SearchResultContents
@@ -27,6 +28,7 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class SearchFragment : Fragment(R.layout.search_fragment) {
 
+    private val adapter = SearchAdapter()
     private val viewModel: SearchViewModel by viewModels()
 
     override fun onCreateView(
@@ -36,6 +38,7 @@ class SearchFragment : Fragment(R.layout.search_fragment) {
     ): View? {
         viewModel.searchResponse.observe(viewLifecycleOwner) {
             Log.d("searchResponse", "${it.data}")
+            adapter.submitList(it.data?.items)
         }
         return super.onCreateView(inflater, container, savedInstanceState)
     }
@@ -47,7 +50,7 @@ class SearchFragment : Fragment(R.layout.search_fragment) {
         val layoutManager = LinearLayoutManager(requireContext())
         val dividerItemDecoration =
             DividerItemDecoration(requireContext(), layoutManager.orientation)
-        val adapter = CustomAdapter(object : CustomAdapter.OnItemClickListener {
+        adapter.setOnItemClickListener(object : SearchAdapter.OnItemClickListener {
             override fun itemClick(item: SearchResultContents) {
                 toDetailPage(item)
             }
@@ -78,60 +81,16 @@ class SearchFragment : Fragment(R.layout.search_fragment) {
     }
 
     fun toDetailPage(item: SearchResultContents) {
-        /*
+        
         val action = SearchFragmentDirections
-                    .actionToDetailPage(item)
-                findNavController().navigate(action)
-        */
+            .actionToDetailPage()
+        findNavController().navigate(action)
+
     }
 
     private fun handleKeyEvent(view: View) {
         val inputMethodManager =
             view.context.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
-    }
-}
-
-val diffUtil = object : DiffUtil.ItemCallback<SearchResultContents>() {
-    override fun areItemsTheSame(
-        oldItem: SearchResultContents,
-        newItem: SearchResultContents
-    ): Boolean {
-        return oldItem.full_name == newItem.full_name
-    }
-
-    override fun areContentsTheSame(
-        oldItem: SearchResultContents,
-        newItem: SearchResultContents
-    ): Boolean {
-        return oldItem == newItem
-    }
-
-}
-
-class CustomAdapter(
-    private val itemClickListener: OnItemClickListener,
-) : ListAdapter<SearchResultContents, CustomAdapter.ViewHolder>(diffUtil) {
-
-    class ViewHolder(view: View) : RecyclerView.ViewHolder(view)
-
-    interface OnItemClickListener {
-        fun itemClick(item: SearchResultContents)
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.layout_item, parent, false)
-        return ViewHolder(view)
-    }
-
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = getItem(position)
-        (holder.itemView.findViewById<View>(R.id.repositoryNameView) as TextView).text =
-            item.full_name
-
-        holder.itemView.setOnClickListener {
-            itemClickListener.itemClick(item)
-        }
     }
 }

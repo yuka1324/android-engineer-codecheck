@@ -6,10 +6,8 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface SearchResultService {
-
     @GET("search/repositories")
     suspend fun getSearchResult(
         @Query("q") q: String
     ): Response<SearchResultsData>
-
 }

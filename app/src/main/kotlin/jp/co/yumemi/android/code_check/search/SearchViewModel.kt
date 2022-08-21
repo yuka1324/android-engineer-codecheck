@@ -25,7 +25,6 @@ class SearchViewModel @Inject constructor(
     private val _searchResponse = MediatorLiveData<Resource<SearchResultsData>>()
     val searchResponse: LiveData<Resource<SearchResultsData>> get() = _searchResponse
 
-
     init {
         _searchResponse.addSource(searchRepository.searchResponse) {
             when (it.state) {
