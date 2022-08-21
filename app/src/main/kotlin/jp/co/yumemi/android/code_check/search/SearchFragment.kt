@@ -5,6 +5,7 @@ package jp.co.yumemi.android.code_check.search
 
 import android.content.Context.INPUT_METHOD_SERVICE
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,18 +14,31 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.*
 import dagger.hilt.android.AndroidEntryPoint
 import jp.co.yumemi.android.code_check.R
+import jp.co.yumemi.android.code_check.data.SearchResultContents
 import jp.co.yumemi.android.code_check.databinding.SearchFragmentBinding
 import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.launch
 
 @DelicateCoroutinesApi
 @AndroidEntryPoint
 class SearchFragment : Fragment(R.layout.search_fragment) {
 
     private val viewModel: SearchViewModel by viewModels()
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        viewModel.searchResponse.observe(viewLifecycleOwner) {
+            Log.d("searchResponse", "${it.data}")
+        }
+        return super.onCreateView(inflater, container, savedInstanceState)
+    }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -45,8 +59,8 @@ class SearchFragment : Fragment(R.layout.search_fragment) {
                 if (action == EditorInfo.IME_ACTION_SEARCH) {
                     editText.text.toString().let {
                         kotlin.runCatching {
-                            viewModel.searchResults(it).apply {
-                                adapter.submitList(this)
+                            lifecycleScope.launch {
+                                viewModel.getSearchResult(it)
                             }
                         }.onSuccess {
                             return@setOnEditorActionListener true
@@ -64,9 +78,11 @@ class SearchFragment : Fragment(R.layout.search_fragment) {
     }
 
     fun toDetailPage(item: SearchResultContents) {
+        /*
         val action = SearchFragmentDirections
-            .actionToDetailPage(item)
-        findNavController().navigate(action)
+                    .actionToDetailPage(item)
+                findNavController().navigate(action)
+        */
     }
 
     private fun handleKeyEvent(view: View) {
@@ -81,7 +97,7 @@ val diffUtil = object : DiffUtil.ItemCallback<SearchResultContents>() {
         oldItem: SearchResultContents,
         newItem: SearchResultContents
     ): Boolean {
-        return oldItem.name == newItem.name
+        return oldItem.full_name == newItem.full_name
     }
 
     override fun areContentsTheSame(
@@ -112,7 +128,7 @@ class CustomAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = getItem(position)
         (holder.itemView.findViewById<View>(R.id.repositoryNameView) as TextView).text =
-            item.name
+            item.full_name
 
         holder.itemView.setOnClickListener {
             itemClickListener.itemClick(item)

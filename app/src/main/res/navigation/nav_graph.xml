@@ -19,10 +19,6 @@
         android:id="@+id/detailFragment"
         android:name="jp.co.yumemi.android.code_check.detail.DetailFragment"
         android:label="@string/app_name"
-        tools:layout="@layout/detail_fragment">
-        <argument
-            android:name="searchResultContents"
-            app:argType="jp.co.yumemi.android.code_check.search.SearchResultContents" />
-    </fragment>
+        tools:layout="@layout/detail_fragment" />
 
 </navigation>
