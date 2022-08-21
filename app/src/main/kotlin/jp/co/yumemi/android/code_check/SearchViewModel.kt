@@ -19,15 +19,11 @@ import kotlinx.parcelize.Parcelize
 import org.json.JSONObject
 import java.util.*
 
-/**
- * TwoFragment で使う
- */
-class OneViewModel(
+class SearchViewModel(
     val context: Context
 ) : ViewModel() {
 
-    // 検索結果
-    fun searchResults(inputText: String): List<item> = runBlocking {
+    fun searchResults(inputText: String): List<SearchResultContents> = runBlocking {
         val client = HttpClient(Android)
 
         return@runBlocking GlobalScope.async {
@@ -37,14 +33,9 @@ class OneViewModel(
             }
 
             val jsonBody = JSONObject(response.receive<String>())
-
             val jsonItems = jsonBody.optJSONArray("items")!!
+            val searchResultList = mutableListOf<SearchResultContents>()
 
-            val items = mutableListOf<item>()
-
-            /**
-             * アイテムの個数分ループする
-             */
             for (i in 0 until jsonItems.length()) {
                 val jsonItem = jsonItems.optJSONObject(i)!!
                 val name = jsonItem.optString("full_name")
@@ -52,11 +43,11 @@ class OneViewModel(
                 val language = jsonItem.optString("language")
                 val stargazersCount = jsonItem.optLong("stargazers_count")
                 val watchersCount = jsonItem.optLong("watchers_count")
-                val forksCount = jsonItem.optLong("forks_conut")
+                val forksCount = jsonItem.optLong("forks_count")
                 val openIssuesCount = jsonItem.optLong("open_issues_count")
 
-                items.add(
-                    item(
+                searchResultList.add(
+                    SearchResultContents(
                         name = name,
                         ownerIconUrl = ownerIconUrl,
                         language = context.getString(R.string.written_language, language),
@@ -70,13 +61,13 @@ class OneViewModel(
 
             lastSearchDate = Date()
 
-            return@async items.toList()
+            return@async searchResultList.toList()
         }.await()
     }
 }
 
 @Parcelize
-data class item(
+data class SearchResultContents(
     val name: String,
     val ownerIconUrl: String,
     val language: String,
