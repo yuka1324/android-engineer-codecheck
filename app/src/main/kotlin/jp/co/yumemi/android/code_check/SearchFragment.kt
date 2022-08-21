@@ -38,11 +38,14 @@ class SearchFragment : Fragment(R.layout.search_fragment) {
             .setOnEditorActionListener { editText, action, _ ->
                 if (action == EditorInfo.IME_ACTION_SEARCH) {
                     editText.text.toString().let {
-                        viewModel.searchResults(it).apply {
-                            adapter.submitList(this)
+                        kotlin.runCatching {
+                            viewModel.searchResults(it).apply {
+                                adapter.submitList(this)
+                            }
+                        }.onSuccess {
+                            return@setOnEditorActionListener true
                         }
                     }
-                    return@setOnEditorActionListener true
                 }
                 return@setOnEditorActionListener false
             }
