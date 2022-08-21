@@ -8,9 +8,11 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
+import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
 import jp.co.yumemi.android.code_check.R
 import jp.co.yumemi.android.code_check.TopActivity.Companion.lastSearchDate
@@ -35,6 +37,8 @@ class DetailFragment : Fragment(R.layout.detail_fragment) {
         binding = DetailFragmentBinding.inflate(inflater, container, false)
         binding.model = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
+        val matchImage: ImageView = binding.ownerIconView
+        Glide.with(requireContext()).load(item.owner.avatar_url).into(matchImage)
         return binding.root
     }
 
