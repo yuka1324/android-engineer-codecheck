@@ -19,10 +19,12 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import jp.co.yumemi.android.code_check.R
+import jp.co.yumemi.android.code_check.TopActivity
 import jp.co.yumemi.android.code_check.data.SearchResultContents
 import jp.co.yumemi.android.code_check.databinding.SearchFragmentBinding
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.launch
+import java.util.*
 
 @DelicateCoroutinesApi
 @AndroidEntryPoint
@@ -66,6 +68,7 @@ class SearchFragment : Fragment(R.layout.search_fragment) {
                                 viewModel.getSearchResult(it)
                             }
                         }.onSuccess {
+                            TopActivity.lastSearchDate = Date()
                             return@setOnEditorActionListener true
                         }
                     }
@@ -81,11 +84,9 @@ class SearchFragment : Fragment(R.layout.search_fragment) {
     }
 
     fun toDetailPage(item: SearchResultContents) {
-        
         val action = SearchFragmentDirections
-            .actionToDetailPage()
+            .actionToDetailPage(item)
         findNavController().navigate(action)
-
     }
 
     private fun handleKeyEvent(view: View) {
