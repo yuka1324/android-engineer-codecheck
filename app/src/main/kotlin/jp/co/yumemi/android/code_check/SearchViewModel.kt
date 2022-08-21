@@ -6,6 +6,7 @@ package jp.co.yumemi.android.code_check
 import android.app.Application
 import android.os.Parcelable
 import androidx.lifecycle.AndroidViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.engine.android.*
@@ -19,9 +20,12 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.parcelize.Parcelize
 import org.json.JSONObject
 import java.util.*
+import javax.inject.Inject
 
 @DelicateCoroutinesApi
-class SearchViewModel(application: Application) : AndroidViewModel(application) {
+@HiltViewModel
+class SearchViewModel @Inject constructor(application: Application) :
+    AndroidViewModel(application) {
 
     fun searchResults(inputText: String): List<SearchResultContents> = runBlocking {
         val client = HttpClient(Android)
