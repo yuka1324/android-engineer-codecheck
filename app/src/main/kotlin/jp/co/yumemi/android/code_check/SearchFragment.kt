@@ -3,11 +3,13 @@
  */
 package jp.co.yumemi.android.code_check
 
+import android.content.Context.INPUT_METHOD_SERVICE
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -36,6 +38,7 @@ class SearchFragment : Fragment(R.layout.search_fragment) {
 
         binding.searchInputText
             .setOnEditorActionListener { editText, action, _ ->
+                handleKeyEvent(editText)
                 if (action == EditorInfo.IME_ACTION_SEARCH) {
                     editText.text.toString().let {
                         kotlin.runCatching {
@@ -61,6 +64,12 @@ class SearchFragment : Fragment(R.layout.search_fragment) {
         val action = SearchFragmentDirections
             .actionToDetailPage(item)
         findNavController().navigate(action)
+    }
+
+    private fun handleKeyEvent(view: View) {
+        val inputMethodManager =
+            view.context.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
     }
 }
 
