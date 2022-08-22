@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import jp.co.yumemi.android.code_check.R
 import jp.co.yumemi.android.code_check.TopActivity
+import jp.co.yumemi.android.code_check.common.State
 import jp.co.yumemi.android.code_check.data.SearchResultContents
 import jp.co.yumemi.android.code_check.databinding.SearchFragmentBinding
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -32,23 +33,35 @@ class SearchFragment : Fragment(R.layout.search_fragment) {
 
     private val adapter = SearchAdapter()
     private val viewModel: SearchViewModel by viewModels()
+    private lateinit var binding: SearchFragmentBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
+        binding = SearchFragmentBinding.inflate(inflater, container, false)
+        binding.model = viewModel
+        binding.lifecycleOwner = viewLifecycleOwner
         viewModel.searchResponse.observe(viewLifecycleOwner) {
-            Log.d("searchResponse", "${it.data}")
-            adapter.submitList(it.data?.items)
+            when (it.state) {
+                State.LOADING -> viewModel.progressBarVisibility.value = View.VISIBLE
+                State.SUCCESS -> {
+                    viewModel.progressBarVisibility.value = View.GONE
+                    adapter.submitList(it.data?.items)
+                }
+                State.ERROR -> {
+                    viewModel.progressBarVisibility.value = View.GONE
+                    Log.e("viewModel.searchResponse", "${it.message}")
+                }
+            }
         }
-        return super.onCreateView(inflater, container, savedInstanceState)
+        return binding.root
     }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val binding = SearchFragmentBinding.bind(view)
         val layoutManager = LinearLayoutManager(requireContext())
         val dividerItemDecoration =
             DividerItemDecoration(requireContext(), layoutManager.orientation)

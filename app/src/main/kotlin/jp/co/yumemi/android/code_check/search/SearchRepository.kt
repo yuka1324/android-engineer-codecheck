@@ -20,6 +20,8 @@ class SearchRepository @Inject constructor(
         if (searchResultService.getSearchResult(inputEditText).isSuccessful) {
             _searchResponse.value =
                 Resource.success(searchResultService.getSearchResult(inputEditText).body())
+        } else {
+            _searchResponse.value = Resource.error("getSearchResult is not successful", null)
         }
     }
 }
