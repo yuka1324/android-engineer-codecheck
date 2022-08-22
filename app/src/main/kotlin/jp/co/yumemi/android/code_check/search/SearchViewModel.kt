@@ -20,6 +20,7 @@ class SearchViewModel @Inject constructor(
     private val searchRepository: SearchRepository
 ) : ViewModel() {
 
+    var editText: MutableLiveData<String> = MutableLiveData()
     var progressBarVisibility = MutableLiveData(View.GONE)
     private val _searchResponse = MediatorLiveData<Resource<SearchResultsData>>()
     val searchResponse: LiveData<Resource<SearchResultsData>> get() = _searchResponse

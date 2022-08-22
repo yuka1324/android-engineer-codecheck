@@ -9,7 +9,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -43,6 +42,12 @@ class SearchFragment : Fragment(R.layout.search_fragment) {
         binding = SearchFragmentBinding.inflate(inflater, container, false)
         binding.model = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
+        viewModel.editText.observe(viewLifecycleOwner) {
+            TopActivity.lastSearchDate = Date()
+            lifecycleScope.launch {
+                viewModel.getSearchResult(it)
+            }
+        }
         viewModel.searchResponse.observe(viewLifecycleOwner) {
             when (it.state) {
                 State.LOADING -> viewModel.progressBarVisibility.value = View.VISIBLE
@@ -71,23 +76,10 @@ class SearchFragment : Fragment(R.layout.search_fragment) {
             }
         })
 
-        binding.searchInputText
-            .setOnEditorActionListener { editText, action, _ ->
-                handleKeyEvent(editText)
-                if (action == EditorInfo.IME_ACTION_SEARCH) {
-                    editText.text.toString().let {
-                        kotlin.runCatching {
-                            lifecycleScope.launch {
-                                viewModel.getSearchResult(it)
-                            }
-                        }.onSuccess {
-                            TopActivity.lastSearchDate = Date()
-                            return@setOnEditorActionListener true
-                        }
-                    }
-                }
-                return@setOnEditorActionListener false
-            }
+        binding.searchInputText.setOnEditorActionListener { editText, _, _ ->
+            handleKeyEvent(editText)
+            return@setOnEditorActionListener true
+        }
 
         binding.recyclerView.also {
             it.layoutManager = layoutManager
