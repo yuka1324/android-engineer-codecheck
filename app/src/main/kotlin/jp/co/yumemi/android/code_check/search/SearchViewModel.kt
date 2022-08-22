@@ -12,6 +12,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import jp.co.yumemi.android.code_check.common.Resource
 import jp.co.yumemi.android.code_check.data.SearchResultsData
 import kotlinx.coroutines.DelicateCoroutinesApi
+import java.util.*
 import javax.inject.Inject
 
 @DelicateCoroutinesApi
@@ -20,6 +21,7 @@ class SearchViewModel @Inject constructor(
     private val searchRepository: SearchRepository
 ) : ViewModel() {
 
+    var lastSearchDate = MutableLiveData(Date())
     var editText: MutableLiveData<String> = MutableLiveData()
     var progressBarVisibility = MutableLiveData(View.GONE)
     private val _searchResponse = MediatorLiveData<Resource<SearchResultsData>>()
@@ -32,6 +34,7 @@ class SearchViewModel @Inject constructor(
     }
 
     suspend fun getSearchResult(editText: String) {
-        searchRepository.getSearchResult(editText)
+        lastSearchDate.value = Date()
+        searchRepository.getSearchResult(editText, lastSearchDate.value)
     }
 }

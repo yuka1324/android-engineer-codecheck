@@ -18,13 +18,11 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import jp.co.yumemi.android.code_check.R
-import jp.co.yumemi.android.code_check.TopActivity
 import jp.co.yumemi.android.code_check.common.State
 import jp.co.yumemi.android.code_check.data.SearchResultContents
 import jp.co.yumemi.android.code_check.databinding.SearchFragmentBinding
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.launch
-import java.util.*
 
 @DelicateCoroutinesApi
 @AndroidEntryPoint
@@ -43,7 +41,6 @@ class SearchFragment : Fragment(R.layout.search_fragment) {
         binding.model = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
         viewModel.editText.observe(viewLifecycleOwner) {
-            TopActivity.lastSearchDate = Date()
             lifecycleScope.launch {
                 viewModel.getSearchResult(it)
             }
