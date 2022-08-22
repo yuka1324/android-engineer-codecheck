@@ -32,7 +32,7 @@ class DetailFragment : Fragment(R.layout.detail_fragment) {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        var item = args.item
+        val item = args.item
         viewModel.setView(item)
         binding = DetailFragmentBinding.inflate(inflater, container, false)
         binding.model = viewModel
@@ -45,6 +45,5 @@ class DetailFragment : Fragment(R.layout.detail_fragment) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.d("検索した日時", lastSearchDate.toString())
-
     }
 }
