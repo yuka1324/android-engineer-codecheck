@@ -15,7 +15,6 @@ import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
 import jp.co.yumemi.android.code_check.R
-import jp.co.yumemi.android.code_check.TopActivity.Companion.lastSearchDate
 import jp.co.yumemi.android.code_check.databinding.DetailFragmentBinding
 import kotlinx.coroutines.DelicateCoroutinesApi
 
@@ -37,13 +36,12 @@ class DetailFragment : Fragment(R.layout.detail_fragment) {
         binding = DetailFragmentBinding.inflate(inflater, container, false)
         binding.model = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
+        viewModel.setLastSearchDate()
+        viewModel.lastSearchDate.observe(viewLifecycleOwner) {
+            Log.d("検索した日時", viewModel.lastSearchDate.value.toString())
+        }
         val matchImage: ImageView = binding.ownerIconView
         Glide.with(requireContext()).load(item.owner.avatar_url).into(matchImage)
         return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        Log.d("検索した日時", lastSearchDate.toString())
     }
 }
