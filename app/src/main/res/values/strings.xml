@@ -4,11 +4,10 @@
     <string name="written_language">Written in %s</string>
 
     <!-- 詳細画面 -->
-    <string name="detail_name_view">JetBrains/kotlin</string>
     <string name="detail_language_view">@string/written_language</string>
-    <string name="detail_stars_view">%d stars</string>
-    <string name="detail_watchers_view">%d watchers</string>
-    <string name="detail_forks_view">%d forks</string>
-    <string name="detail_open_issue_view">%d open issues</string>
+    <string name="detail_stars_view">%s stars</string>
+    <string name="detail_watchers_view">%s watchers</string>
+    <string name="detail_forks_view">%s forks</string>
+    <string name="detail_open_issue_view">%s open issues</string>
 
 </resources>
