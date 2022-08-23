@@ -1,4 +1,4 @@
-package jp.co.yumemi.android.code_check.common
+package jp.cp.yumemi.android.code_check.injection
 
 import dagger.Module
 import dagger.Provides
@@ -8,7 +8,7 @@ import jp.co.yumemi.android.code_check.service.SearchResultService
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
@@ -31,14 +31,14 @@ class Client {
 
             return httpClient
         }
-    
+
     @Singleton
     @Provides
     fun createService(): Retrofit {
         val client = httpBuilder.build()
         return Retrofit.Builder()
             .baseUrl("https://api.github.com/")
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(MoshiConverterFactory.create())
             .client(client)
             .build()
     }
