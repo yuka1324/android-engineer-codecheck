@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import jp.co.yumemi.android.code_check.R
 import jp.co.yumemi.android.code_check.common.State
+import jp.co.yumemi.android.code_check.common.showDialog
 import jp.co.yumemi.android.code_check.data.SearchResultContents
 import jp.co.yumemi.android.code_check.databinding.SearchFragmentBinding
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -42,17 +43,24 @@ class SearchFragment : Fragment(R.layout.search_fragment) {
         binding.lifecycleOwner = viewLifecycleOwner
         viewModel.editText.observe(viewLifecycleOwner) {
             lifecycleScope.launch {
-                viewModel.getSearchResult(it)
+                viewModel.getSearchResult()
             }
         }
         viewModel.searchResponse.observe(viewLifecycleOwner) {
             when (it.state) {
                 State.LOADING -> viewModel.progressBarVisibility.value = View.VISIBLE
                 State.SUCCESS -> {
+                    if (it.data?.items?.size == 0) {
+                        viewModel.noDataDialogVisibility.value = View.VISIBLE
+                    } else {
+                        viewModel.noDataDialogVisibility.value = View.GONE
+                    }
                     viewModel.progressBarVisibility.value = View.GONE
                     adapter.submitList(it.data?.items)
                 }
                 State.ERROR -> {
+                    requireContext().showDialog()
+                    viewModel.buttonVisibility.value = View.VISIBLE
                     viewModel.progressBarVisibility.value = View.GONE
                     Log.e("viewModel.searchResponse", "${it.message}")
                 }
@@ -82,6 +90,13 @@ class SearchFragment : Fragment(R.layout.search_fragment) {
             it.layoutManager = layoutManager
             it.addItemDecoration(dividerItemDecoration)
             it.adapter = adapter
+        }
+
+        binding.button.setOnClickListener {
+            lifecycleScope.launch {
+                viewModel.buttonVisibility.value = View.GONE
+                viewModel.getSearchResult()
+            }
         }
     }
 

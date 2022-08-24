@@ -48,6 +48,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:text="@={model.editText}"
+                    android:maxLength="20"
                     android:background="@android:color/transparent"
                     android:hint="@string/searchInputText_hint"
                     android:imeOptions="actionSearch"
@@ -58,12 +59,34 @@
 
         </com.google.android.material.card.MaterialCardView>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/search_no_data_text"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:visibility="@{model.noDataDialogVisibility}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/recyclerView" />
+
         <ProgressBar
             android:id="@+id/progress_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="@{model.progressBarVisibility}"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/recyclerView" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:visibility="@{model.buttonVisibility}"
+            android:text="@string/search_retry_button_text"
+            app:backgroundTint="@color/gray"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/recyclerView" />

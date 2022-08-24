@@ -1,7 +1,11 @@
 <resources>
     <string name="app_name">Android Engineer CodeCheck</string>
-    <string name="searchInputText_hint">GitHub のリポジトリを検索できるよー</string>
     <string name="written_language">Written in %s</string>
+
+    <!--　検索画面　-->
+    <string name="searchInputText_hint">GitHub のリポジトリを検索できるよー</string>
+    <string name="search_retry_button_text">Retry</string>
+    <string name="search_no_data_text">検索結果：０件</string>
 
     <!-- 詳細画面 -->
     <string name="detail_language_view">@string/written_language</string>
@@ -9,5 +13,10 @@
     <string name="detail_watchers_view">%s watchers</string>
     <string name="detail_forks_view">%s forks</string>
     <string name="detail_open_issue_view">%s open issues</string>
+
+    <!-- エラーダイアログ -->
+    <string name="error_dialog_title">GitHub API has error</string>
+    <string name="error_dialog_text">しばらく経ってから再度お試しください</string>
+    <string name="error_dialog_button">OK</string>
 
 </resources>

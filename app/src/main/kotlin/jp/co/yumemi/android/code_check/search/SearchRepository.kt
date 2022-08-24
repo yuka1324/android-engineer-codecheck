@@ -22,7 +22,7 @@ class SearchRepository @Inject constructor(
     private val _searchResponse = MediatorLiveData<Resource<SearchResultsData>>()
     val searchResponse: LiveData<Resource<SearchResultsData>> get() = _searchResponse
 
-    suspend fun getSearchResult(inputEditText: String, lastSearchDate: Date?) {
+    suspend fun getSearchResult(inputEditText: String?, lastSearchDate: Date?) {
         _searchResponse.value = Resource.loading()
         if (searchResultService.getSearchResult(inputEditText).isSuccessful) {
             savedLastSearchDate.value = lastSearchDate

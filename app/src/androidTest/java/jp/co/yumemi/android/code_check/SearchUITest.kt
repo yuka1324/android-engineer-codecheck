@@ -8,8 +8,7 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.closeSoftKeyboard
 import androidx.test.espresso.action.ViewActions.replaceText
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
-import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
@@ -31,7 +30,7 @@ class SearchUITest {
     var mActivityScenarioRule = ActivityScenarioRule(TopActivity::class.java)
 
     @Test
-    fun searchUITest() {
+    fun searchViewUITest() {
         val textInputEditText = onView(
             allOf(
                 withId(R.id.searchInputText),
@@ -44,6 +43,22 @@ class SearchUITest {
 
         onView(withId(R.id.recyclerView)).check(matches(hasText(0, "JetBrains/kotlin")))
         onView(withId(R.id.recyclerView)).check(matches(hasText(1, "hussien89aa/KotlinUdemy")))
+    }
+
+    @Test
+    fun searchBarMaxLengthTest() {
+        val textInputEditText = onView(
+            allOf(
+                withId(R.id.searchInputText),
+                isDisplayed()
+            )
+        )
+        textInputEditText.perform(
+            replaceText("hogehogehogehogehogehogehogehogehogehogehogehogehogehogehoge"),
+            closeSoftKeyboard()
+        )
+        textInputEditText.check(matches(withText("hogehogehogehogehoge")))
+
     }
 
     private fun hasText(position: Int, text: String) = object : TypeSafeMatcher<View>() {
