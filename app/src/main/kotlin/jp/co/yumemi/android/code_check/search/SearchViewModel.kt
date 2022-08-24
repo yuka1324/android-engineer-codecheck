@@ -24,6 +24,7 @@ class SearchViewModel @Inject constructor(
     var lastSearchDate = MutableLiveData(Date())
     var editText: MutableLiveData<String> = MutableLiveData()
     var progressBarVisibility = MutableLiveData(View.GONE)
+    var buttonVisibility = MutableLiveData(View.GONE)
     private val _searchResponse = MediatorLiveData<Resource<SearchResultsData>>()
     val searchResponse: LiveData<Resource<SearchResultsData>> get() = _searchResponse
 
@@ -33,8 +34,8 @@ class SearchViewModel @Inject constructor(
         }
     }
 
-    suspend fun getSearchResult(editText: String) {
+    suspend fun getSearchResult() {
         lastSearchDate.value = Date()
-        searchRepository.getSearchResult(editText, lastSearchDate.value)
+        searchRepository.getSearchResult(editText.value, lastSearchDate.value)
     }
 }

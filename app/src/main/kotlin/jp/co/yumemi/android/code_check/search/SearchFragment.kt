@@ -43,7 +43,7 @@ class SearchFragment : Fragment(R.layout.search_fragment) {
         binding.lifecycleOwner = viewLifecycleOwner
         viewModel.editText.observe(viewLifecycleOwner) {
             lifecycleScope.launch {
-                viewModel.getSearchResult(it)
+                viewModel.getSearchResult()
             }
         }
         viewModel.searchResponse.observe(viewLifecycleOwner) {
@@ -55,6 +55,7 @@ class SearchFragment : Fragment(R.layout.search_fragment) {
                 }
                 State.ERROR -> {
                     requireContext().showDialog()
+                    viewModel.buttonVisibility.value = View.VISIBLE
                     viewModel.progressBarVisibility.value = View.GONE
                     Log.e("viewModel.searchResponse", "${it.message}")
                 }
@@ -84,6 +85,13 @@ class SearchFragment : Fragment(R.layout.search_fragment) {
             it.layoutManager = layoutManager
             it.addItemDecoration(dividerItemDecoration)
             it.adapter = adapter
+        }
+
+        binding.button.setOnClickListener {
+            lifecycleScope.launch {
+                viewModel.buttonVisibility.value = View.GONE
+                viewModel.getSearchResult()
+            }
         }
     }
 
