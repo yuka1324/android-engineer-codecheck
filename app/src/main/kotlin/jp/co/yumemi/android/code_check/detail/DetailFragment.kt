@@ -3,6 +3,8 @@
  */
 package jp.co.yumemi.android.code_check.detail
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -42,6 +44,14 @@ class DetailFragment : Fragment(R.layout.detail_fragment) {
         }
         val matchImage: ImageView = binding.ownerIconView
         Glide.with(requireContext()).load(item.owner?.avatar_url).into(matchImage)
+
+        binding.moreDetailButton.setOnClickListener {
+            val url = item.owner?.html_url
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.data = Uri.parse(url)
+            startActivity(intent)
+        }
+
         return binding.root
     }
 }

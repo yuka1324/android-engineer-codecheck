@@ -86,13 +86,13 @@ class SearchFragment : Fragment(R.layout.search_fragment) {
             return@setOnEditorActionListener true
         }
 
-        binding.recyclerView.also {
+        binding.searchContentsRecyclerView.also {
             it.layoutManager = layoutManager
             it.addItemDecoration(dividerItemDecoration)
             it.adapter = adapter
         }
 
-        binding.button.setOnClickListener {
+        binding.retryButton.setOnClickListener {
             lifecycleScope.launch {
                 viewModel.buttonVisibility.value = View.GONE
                 viewModel.getSearchResult()

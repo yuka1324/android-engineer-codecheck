@@ -13,6 +13,8 @@
     <string name="detail_watchers_view">%s watchers</string>
     <string name="detail_forks_view">%s forks</string>
     <string name="detail_open_issue_view">%s open issues</string>
+    <string name="detail_button_text">more detail</string>
+
 
     <!-- エラーダイアログ -->
     <string name="error_dialog_title">GitHub API has error</string>
