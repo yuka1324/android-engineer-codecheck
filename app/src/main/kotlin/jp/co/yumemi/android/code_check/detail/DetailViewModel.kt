@@ -11,6 +11,7 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 import java.util.*
 import javax.inject.Inject
 
+
 @DelicateCoroutinesApi
 @HiltViewModel
 class DetailViewModel @Inject constructor(

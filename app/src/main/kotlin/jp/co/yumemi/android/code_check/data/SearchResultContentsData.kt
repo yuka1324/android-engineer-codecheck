@@ -16,5 +16,6 @@ data class SearchResultContents(
 
 @JsonClass(generateAdapter = true)
 data class SearchResultOwnerContents(
-    val avatar_url: String?
+    val avatar_url: String?,
+    val html_url: String?
 )
