@@ -10,4 +10,9 @@
     <string name="detail_forks_view">%s forks</string>
     <string name="detail_open_issue_view">%s open issues</string>
 
+    <!-- エラーダイアログ -->
+    <string name="error_dialog_title">GitHub API has error</string>
+    <string name="error_dialog_text">しばらく経ってから再度お試しください</string>
+    <string name="error_dialog_button">OK</string>
+
 </resources>

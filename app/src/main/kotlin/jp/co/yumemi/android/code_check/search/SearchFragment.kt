@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import jp.co.yumemi.android.code_check.R
 import jp.co.yumemi.android.code_check.common.State
+import jp.co.yumemi.android.code_check.common.showDialog
 import jp.co.yumemi.android.code_check.data.SearchResultContents
 import jp.co.yumemi.android.code_check.databinding.SearchFragmentBinding
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -53,6 +54,7 @@ class SearchFragment : Fragment(R.layout.search_fragment) {
                     adapter.submitList(it.data?.items)
                 }
                 State.ERROR -> {
+                    requireContext().showDialog()
                     viewModel.progressBarVisibility.value = View.GONE
                     Log.e("viewModel.searchResponse", "${it.message}")
                 }
