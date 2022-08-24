@@ -1,14 +1,18 @@
-package jp.co.yumemi.android.code_check.common
+package jp.co.yumemi.android.code_check.injection
 
+import android.content.Context
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import jp.co.yumemi.android.code_check.service.MockSearchResultService
 import jp.co.yumemi.android.code_check.service.SearchResultService
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.moshi.MoshiConverterFactory
+import retrofit2.mock.MockRetrofit
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
@@ -31,21 +35,26 @@ class Client {
 
             return httpClient
         }
-    
+
     @Singleton
     @Provides
     fun createService(): Retrofit {
         val client = httpBuilder.build()
         return Retrofit.Builder()
             .baseUrl("https://api.github.com/")
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(MoshiConverterFactory.create())
             .client(client)
             .build()
     }
 
     @Singleton
     @Provides
-    fun provideSearchResultService(retrofit: Retrofit): SearchResultService = retrofit.create(
-        SearchResultService::class.java
-    )
+    fun provideSearchResultService(
+        retrofit: Retrofit,
+        @ApplicationContext context: Context
+    ): SearchResultService {
+        val mockRetrofit = MockRetrofit.Builder(retrofit).build()
+        val api = mockRetrofit.create(SearchResultService::class.java)
+        return MockSearchResultService(api, context)
+    }
 }

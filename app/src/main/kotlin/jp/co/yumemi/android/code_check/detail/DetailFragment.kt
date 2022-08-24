@@ -41,7 +41,7 @@ class DetailFragment : Fragment(R.layout.detail_fragment) {
             Log.d("検索した日時", viewModel.lastSearchDate.value.toString())
         }
         val matchImage: ImageView = binding.ownerIconView
-        Glide.with(requireContext()).load(item.owner.avatar_url).into(matchImage)
+        Glide.with(requireContext()).load(item.owner?.avatar_url).into(matchImage)
         return binding.root
     }
 }
