@@ -25,6 +25,7 @@ class SearchViewModel @Inject constructor(
     var editText: MutableLiveData<String> = MutableLiveData()
     var progressBarVisibility = MutableLiveData(View.GONE)
     var buttonVisibility = MutableLiveData(View.GONE)
+    var noDataDialogVisibility = MutableLiveData(View.GONE)
     private val _searchResponse = MediatorLiveData<Resource<SearchResultsData>>()
     val searchResponse: LiveData<Resource<SearchResultsData>> get() = _searchResponse
 

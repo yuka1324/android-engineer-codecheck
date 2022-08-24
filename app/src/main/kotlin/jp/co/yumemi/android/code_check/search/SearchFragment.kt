@@ -50,6 +50,11 @@ class SearchFragment : Fragment(R.layout.search_fragment) {
             when (it.state) {
                 State.LOADING -> viewModel.progressBarVisibility.value = View.VISIBLE
                 State.SUCCESS -> {
+                    if (it.data?.items?.size == 0) {
+                        viewModel.noDataDialogVisibility.value = View.VISIBLE
+                    } else {
+                        viewModel.noDataDialogVisibility.value = View.GONE
+                    }
                     viewModel.progressBarVisibility.value = View.GONE
                     adapter.submitList(it.data?.items)
                 }

@@ -58,6 +58,17 @@
 
         </com.google.android.material.card.MaterialCardView>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/search_no_data_text"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:visibility="@{model.noDataDialogVisibility}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/recyclerView" />
+
         <ProgressBar
             android:id="@+id/progress_bar"
             android:layout_width="match_parent"

@@ -5,6 +5,7 @@
     <!--　検索画面　-->
     <string name="searchInputText_hint">GitHub のリポジトリを検索できるよー</string>
     <string name="search_retry_button_text">Retry</string>
+    <string name="search_no_data_text">検索結果：０件</string>
 
     <!-- 詳細画面 -->
     <string name="detail_language_view">@string/written_language</string>
